@@ -2,7 +2,7 @@ const UserRepository=require("../repository/user-repository");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const {JWT_KEY}=require("../config/serverConfig");
-const { use } = require("react");
+
 
 
 class UserService{
@@ -24,16 +24,23 @@ class UserService{
             throw error;
         }
     }
-    createToken(user)
+    async signIn(email,userInputPlainPassword)
     {
         try{
-            const result=jwt.sign(user,JWT_KEY,{expiresIn:'1h'})
-            return result;
+            const user=await this.userRepository.getByEmail(email);
+            const passwordMatching=this.checkPassword(userInputPlainPassword,user.password);
+            if(!passwordMatching)
+            {
+                console.log("Passwords dont match");
+                throw {error:'passwords arent matching'};
+            }
+            const newJwt=this.createToken({email:user.email,id:user.id});
+            return newJwt;
 
         }
         catch(error)
         {
-            console.log("Something went wrong in token creation");
+            console.log("Something went wrong in the sign in process");
             throw error;
         }
     }
@@ -49,6 +56,20 @@ class UserService{
             throw error;
         }
     }
+    createToken(user)
+    {
+        try{
+            const result=jwt.sign(user,JWT_KEY,{expiresIn:'1h'})
+            return result;
+
+        }
+        catch(error)
+        {
+            console.log("Something went wrong in token creation");
+            throw error;
+        }
+    }
+    
     verifyToken(token)
     {
         try{
@@ -62,6 +83,7 @@ class UserService{
             throw error;
         }
     }
+    
 }
 
 
