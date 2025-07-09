@@ -19,9 +19,9 @@ const prepareAndStartServer=()=>{
           db.sequelize.sync({alter:true});
         }
           */
-         const u=await User.findByPk(3);
-         const r=await Role.findByPk(1);
-         u.addRole(r);
+       //  const u=await User.findByPk(3);
+        // const r=await Role.findByPk(1);
+        // u.addRole(r);
       /*  const service=new UserService();
     const newToken=service.createToken({email:"aarushi@admin.com",id:1});
    // console.log(newToken);

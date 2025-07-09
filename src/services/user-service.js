@@ -105,6 +105,20 @@ class UserService{
             throw error;
         }
     }
+    async isAdmin(userId)
+    {
+        try{
+            
+            const user=await this.userRepository.isAdmin(userId);
+            return user;
+
+        }
+        catch(error)
+        {
+            console.log("Something went wrong in service layer");
+            throw error;
+        }
+    }
     
 }
 
